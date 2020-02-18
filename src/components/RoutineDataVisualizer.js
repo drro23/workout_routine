@@ -1,35 +1,25 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
+import PropTypes from 'prop-types';
 
 class RoutineDataVisualizer extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         routines: [
-    //             {
-    //                 tableRows: this.props.tableRows,
-    //                 date: this.props.date,
-    //             }
-    //         ]
-    //     }
-    // }
     constructor(props) {
         super(props);
     
         this.state = {
           options: {
             chart: {
-              id: "basic-line",
+              id: "visualize-charge",
               type: "line",
             },
             xaxis: {
-              categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+              categories: this.props.visualizeData.categories, // will be an array of dates
             }
           },
           series: [
             {
-              name: "series-1",
-              data: [30, 40, 45, 50, 49, 60, 70, 91]
+              name: "max-charge-serie",
+              data: this.props.visualizeData.serieData // will be an array of max charges
             }
           ]
         };
@@ -44,6 +34,10 @@ class RoutineDataVisualizer extends React.Component {
             </div>
         );
     }
+}
+
+RoutineDataVisualizer.propTypes = {
+  visualizeData = PropTypes.array.isRequired,
 }
 
 export default RoutineDataVisualizer;

@@ -19,6 +19,10 @@ class App extends React.Component {
           charge: 0,
       }],
       date: moment(),
+      visualizeData: {
+        categories: [], // all dates are inserted here
+        serieData: [] // all calculated max charges are inserted here
+      },
     };
   }
 
@@ -79,8 +83,36 @@ class App extends React.Component {
     });
   }
 
+  validTableRows(tableRows) {
+    let valid = false;
+
+    tableRows.forEach(row => {
+      if (!(row.exerciseName === '' || row.series === 0 || row.reps === 0 || row.charge === 0))
+        valid = true;
+    });
+    
+    return valid;
+  }
+
   // Arrow fx for binding
-  submitWorkoutRoutineData = () => {
+  handleWorkoutRoutineData = () => {
+    if (this.validTableRows(this.state.tableRows)) {
+      
+      let categories = [] // series x reps x charge
+      this.setState({
+        tableRows: [
+          {
+            id: 0,
+            exerciseName: '',
+            series: 0,
+            reps: 0,
+            charge: 0,
+          }
+        ],
+        date: moment(),
+        visualizeData: [],
+      });
+    }
 
   }
 
@@ -97,8 +129,9 @@ class App extends React.Component {
                           setCharge={this.handleChargeChange} 
                           setDate={this.handleDateChange} 
                           addRow={this.addNewRow}
+                          submitData={this.handleWorkoutRoutineData}
           />
-          <RoutineDataVisualizer />
+          <RoutineDataVisualizer visualizeData={this.state.visualizeData}/>
         </div>
       </div>
     );

@@ -57,7 +57,7 @@ class WorkoutRoutine extends React.Component {
                         </tbody>
                     </table>
                     <div className="mt-4 px-2">
-                        <button className="float-right clear-both bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" type="button" onClick={this.props.addRow}>+</button>
+                        <button type="button" className="float-right clear-both bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={this.props.addRow}>+</button>
                         <DatePicker format="DD-MM-YYYY"
                                     value={this.props.date}
                                     onChange={this.handleDateChange} />
