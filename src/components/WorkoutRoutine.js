@@ -33,7 +33,7 @@ class WorkoutRoutine extends React.Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        alert("submit");
+        this.props.submitWorkoutRoutineData();
     }
 
     render() {

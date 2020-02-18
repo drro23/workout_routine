@@ -64,11 +64,6 @@ class App extends React.Component {
     this.setState({ date: date });
   }
 
-  // Arrow fx for binding
-  submitWorkoutRoutineData = () => {
-
-  }
-
   addNewRow = () => {
     let tableRows = this.state.tableRows;
     let tableRow = {
@@ -84,12 +79,25 @@ class App extends React.Component {
     });
   }
 
+  // Arrow fx for binding
+  submitWorkoutRoutineData = () => {
+
+  }
+
   render() {
     return (
       <div className="bg-gray-900 h-full w-full">
         <Menu />
         <div className="flex flex-col justify-around">
-          <WorkoutRoutine tableRows={this.state.tableRows} date={this.state.date} setExerciseName={this.handleExerciseNameChange} setSeries={this.handleSeriesChange} setReps={this.handleRepsChange} setCharge={this.handleChargeChange} setDate={this.handleDateChange} addRow={this.addNewRow}/>
+          <WorkoutRoutine tableRows={this.state.tableRows} 
+                          date={this.state.date} 
+                          setExerciseName={this.handleExerciseNameChange} 
+                          setSeries={this.handleSeriesChange} 
+                          setReps={this.handleRepsChange} 
+                          setCharge={this.handleChargeChange} 
+                          setDate={this.handleDateChange} 
+                          addRow={this.addNewRow}
+          />
           <RoutineDataVisualizer />
         </div>
       </div>
