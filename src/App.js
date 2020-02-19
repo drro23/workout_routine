@@ -97,8 +97,15 @@ class App extends React.Component {
   // Arrow fx for binding
   handleWorkoutRoutineData = () => {
     if (this.validTableRows(this.state.tableRows)) {
-      
-      let categories = [] // series x reps x charge
+      let newDate = this.state.date;
+      let maxCharge = 0;
+      this.state.tableRows.forEach(row => {
+        maxCharge += row.series * row.reps * row.charge;
+      });
+      let newCategorie = this.state.visualizeData.categories;
+      newCategorie.push(newDate.format("D-M-Y"));
+      let newSerieData = this.state.visualizeData.serieData;
+      newSerieData.push(maxCharge);
       this.setState({
         tableRows: [
           {
@@ -110,7 +117,8 @@ class App extends React.Component {
           }
         ],
         date: moment(),
-        visualizeData: [],
+        categories: newCategorie,
+        serieData: newSerieData
       });
     }
 
@@ -131,7 +139,7 @@ class App extends React.Component {
                           addRow={this.addNewRow}
                           submitData={this.handleWorkoutRoutineData}
           />
-          <RoutineDataVisualizer visualizeData={this.state.visualizeData}/>
+          <RoutineDataVisualizer data={this.state.visualizeData}/>
         </div>
       </div>
     );

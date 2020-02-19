@@ -13,17 +13,30 @@ class RoutineDataVisualizer extends React.Component {
               type: "line",
             },
             xaxis: {
-              categories: this.props.visualizeData.categories, // will be an array of dates
+              categories: this.props.data.categories, // will be an array of dates
             }
           },
           series: [
             {
               name: "max-charge-serie",
-              data: this.props.visualizeData.serieData // will be an array of max charges
+              data: this.props.data.serieData // will be an array of max charges
             }
           ]
         };
       }
+
+      shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.data !== this.props.data || this.state.data !== nextState.data) {
+          this.setState(
+            {
+              categories: nextProps.data.categories,
+              series: nextProps.serieData,
+            });
+          return true;
+        }
+        return false;
+      }
+
     render() {
         return (
             <div id="chart" className="block text-white mx-auto border-2 mt-12">
@@ -37,7 +50,7 @@ class RoutineDataVisualizer extends React.Component {
 }
 
 RoutineDataVisualizer.propTypes = {
-  visualizeData = PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
 }
 
 export default RoutineDataVisualizer;
