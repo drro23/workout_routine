@@ -5,10 +5,10 @@ class TableRow extends React.Component {
     render() {
         return (
             <tr className="text-black">
-                <td><input data-rowid={this.props.id} className="rounded-full pr-1 text-right" type="text" value={this.props.exerciseName} onChange={this.props.onExerciseNameChange} /></td>
-                <td><input data-rowid={this.props.id} className="rounded-full text-right" type="number" value={this.props.series} onChange={this.props.onSeriesChange} /></td>
-                <td><input data-rowid={this.props.id} className="rounded-full text-right" type="number" value={this.props.reps} onChange={this.props.onRepsChange} /></td>
-                <td><input data-rowid={this.props.id} className="rounded-full text-right" type="number" value={this.props.charge} onChange={this.props.onChargeChange} /></td>
+                <td><input data-rowid={this.props.id} className="pr-1 text-right" type="text" value={this.props.exerciseName} onChange={this.props.onExerciseNameChange} /></td>
+                <td><input data-rowid={this.props.id} className="text-right" type="number" value={this.props.series} onChange={this.props.onSeriesChange} /></td>
+                <td><input data-rowid={this.props.id} className="text-right" type="number" value={this.props.reps} onChange={this.props.onRepsChange} /></td>
+                <td><input data-rowid={this.props.id} className="text-right" type="number" value={this.props.charge} onChange={this.props.onChargeChange} /></td>
             </tr>
         );
     }

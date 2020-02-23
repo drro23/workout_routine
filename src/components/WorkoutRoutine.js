@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import TableRow from './TableRow';
 import { DatePicker }from "antd";
 import "antd/dist/antd.css";
-
+import "../styles/WorkoutRoutine.scss";
+import { Button } from 'antd';
+import { ReactComponent as PlusIcon} from '../icons8-plus.svg';
 
 class WorkoutRoutine extends React.Component {
     // Arrow fx for binding
@@ -40,8 +42,11 @@ class WorkoutRoutine extends React.Component {
         const tableRows = this.props.tableRows.map(({id, exerciseName, series, reps, charge}) => 
             <TableRow key={id} id={id} exerciseName={exerciseName} series={series} reps={reps} charge={charge} onExerciseNameChange={this.handleExerciseNameChange} onSeriesChange={this.handleSeriesChange} onRepsChange={this.handleRepsChange} onChargeChange={this.handleChargeChange} />
         );
+
+        const errorMessage = <p>You must fill all the fields before validating !</p>;
+
         return (
-            <div className="mx-auto">
+            <div className="mx-auto mt-10 p-6 wkr-table">
                 <form onSubmit={this.handleSubmit}>
                     <table className="text-white border-separate">
                         <thead>
@@ -53,17 +58,25 @@ class WorkoutRoutine extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {tableRows}
+                            { tableRows }
                         </tbody>
                     </table>
                     <div className="mt-4 px-2">
-                        <button type="button" className="float-right clear-both bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={this.props.addRow}>+</button>
+                        
+                        <button type="button" className="float-right clear-both" onClick={this.props.addRow}>{ <PlusIcon />}</button>
                         <DatePicker format="DD-MM-YYYY"
                                     value={this.props.date}
                                     onChange={this.handleDateChange} />
-                        <button type="submit" className="block mx-auto mt-2 bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded">Validate</button>
+                        
+                        {/* <button type="submit" className="block mx-auto mt-2 bg-blue-700 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded">Validate</button> */}
+                    </div>
+                    <div className="text-center">
+                        <Button type="primary" htmlType="submit" >Validate</Button>
                     </div>
                 </form>
+                <div className="errorHandler">
+                    { this.props.error && errorMessage}
+                </div>
             </div>
         );
     }
@@ -78,6 +91,7 @@ WorkoutRoutine.propTypes = {
     setReps: PropTypes.func.isRequired,
     setCharge: PropTypes.func.isRequired,
     setDate: PropTypes.func.isRequired,
+    error: PropTypes.bool.isRequired,
 }
 
 export default WorkoutRoutine;

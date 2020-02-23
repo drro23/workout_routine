@@ -1,10 +1,11 @@
-import React from 'react';
-import './styles/App.css';
-import Menu from './components/Menu';
-import WorkoutRoutine from './components/WorkoutRoutine';
-import RoutineDataVisualizer from './components/RoutineDataVisualizer';
-import moment from 'moment';
-
+import React from "react";
+import "./styles/App.scss";
+import Menu from "./components/Menu";
+import WorkoutRoutine from "./components/WorkoutRoutine";
+// import RoutineDataVisualizer from "./components/RoutineDataVisualizer";
+// import ReactApexChart from "react-apexcharts";
+import moment from "moment";
+import { ResponsiveBar as ResponsiveBarChart } from "@nivo/bar";
 
 class App extends React.Component {
   constructor(props) {
@@ -13,16 +14,20 @@ class App extends React.Component {
       tableRows: [
         {
           id: 0,
-          exerciseName: '',
+          exerciseName: "",
           series: 0,
           reps: 0,
-          charge: 0,
-      }],
+          charge: 0
+        }
+      ],
       date: moment(),
-      visualizeData: {
-        categories: [], // all dates are inserted here
-        serieData: [] // all calculated max charges are inserted here
-      },
+      data: [
+        {
+          date: "02-17-2020",
+          maxCharge: 10
+        }
+      ],
+      error: false
     };
   }
 
@@ -30,116 +35,185 @@ class App extends React.Component {
   handleExerciseNameChange = (rowId, exerciseName) => {
     let tableRow = this.state.tableRows[rowId];
     tableRow.exerciseName = exerciseName;
-    this.setState({ tableRows: this.state.tableRows.map(row => row.id === rowId ? Object.assign(row, tableRow) : row) });
-  }
+    this.setState({
+      tableRows: this.state.tableRows.map(row =>
+        row.id === rowId ? Object.assign(row, tableRow) : row
+      )
+    });
+  };
 
   // Arrow fx for binding
   handleSeriesChange = (rowId, series) => {
     let tableRow = this.state.tableRows[rowId];
-    if (!isNaN(parseInt(series)) || series === '')
-    {
-      tableRow.series = series === '' ? 0 : parseInt(series);
-      this.setState({ tableRows: this.state.tableRows.map(row => row.id === rowId ? Object.assign(row, tableRow) : row) });
+    if (!isNaN(parseInt(series)) || series === "") {
+      tableRow.series = series === "" ? 0 : parseInt(series);
+      this.setState({
+        tableRows: this.state.tableRows.map(row =>
+          row.id === rowId ? Object.assign(row, tableRow) : row
+        )
+      });
     }
-  }
+  };
 
   // Arrow fx for binding
   handleRepsChange = (rowId, reps) => {
     let tableRow = this.state.tableRows[rowId];
-    if (!isNaN(parseInt(reps)) || reps === '')
-    {
-      tableRow.reps = reps === '' ? 0 : parseInt(reps);
-      this.setState({ tableRows: this.state.tableRows.map(row => row.id === rowId ? Object.assign(row, tableRow) : row) });
+    if (!isNaN(parseInt(reps)) || reps === "") {
+      tableRow.reps = reps === "" ? 0 : parseInt(reps);
+      this.setState({
+        tableRows: this.state.tableRows.map(row =>
+          row.id === rowId ? Object.assign(row, tableRow) : row
+        )
+      });
     }
-  }
+  };
 
   // Arrow fx for binding
   handleChargeChange = (rowId, charge) => {
     let tableRow = this.state.tableRows[rowId];
-    if (!isNaN(parseInt(charge)) || charge === '')
-    {
-      tableRow.charge = charge === '' ? 0 : parseInt(charge);
-      this.setState({ tableRows: this.state.tableRows.map(row => row.id === rowId ? Object.assign(row, tableRow) : row) });
+    if (!isNaN(parseInt(charge)) || charge === "") {
+      tableRow.charge = charge === "" ? 0 : parseInt(charge);
+      this.setState({
+        tableRows: this.state.tableRows.map(row =>
+          row.id === rowId ? Object.assign(row, tableRow) : row
+        )
+      });
     }
-  }
+  };
 
   // Arrow fx for binding
-  handleDateChange = (date) => {
+  handleDateChange = date => {
     this.setState({ date: date });
-  }
+  };
 
   addNewRow = () => {
     let tableRows = this.state.tableRows;
     let tableRow = {
       id: tableRows.length,
-      exerciseName: '',
+      exerciseName: "",
       series: 0,
       reps: 0,
       charge: 0
-    }
+    };
     tableRows.push(tableRow);
     this.setState({
       tableRows: tableRows
     });
-  }
+  };
 
   validTableRows(tableRows) {
     let valid = false;
 
     tableRows.forEach(row => {
-      if (!(row.exerciseName === '' || row.series === 0 || row.reps === 0 || row.charge === 0))
+      if (
+        !(
+          row.exerciseName === "" ||
+          row.series === 0 ||
+          row.reps === 0 ||
+          row.charge === 0
+        )
+      )
         valid = true;
     });
-    
+
     return valid;
+  }
+
+  errorVisibleTimer() {
+    this.setState({error: this.state.error ? false : this.state.error});
   }
 
   // Arrow fx for binding
   handleWorkoutRoutineData = () => {
-    if (this.validTableRows(this.state.tableRows)) {
+    let tableRows = this.state.tableRows;
+
+    if (this.validTableRows(tableRows)) {
       let newDate = this.state.date;
       let maxCharge = 0;
-      this.state.tableRows.forEach(row => {
-        maxCharge += row.series * row.reps * row.charge;
+
+      tableRows.forEach(row => {
+        maxCharge += row.series * (row.reps * row.charge);
       });
-      let newCategorie = this.state.visualizeData.categories;
-      newCategorie.push(newDate.format("D-M-Y"));
-      let newSerieData = this.state.visualizeData.serieData;
-      newSerieData.push(maxCharge);
-      this.setState({
+
+      let newEntry = {
+        date: newDate.format("M-D-Y"),
+        maxCharge: maxCharge
+      };
+
+      this.setState(prevState => ({
         tableRows: [
           {
             id: 0,
-            exerciseName: '',
+            exerciseName: "",
             series: 0,
             reps: 0,
-            charge: 0,
+            charge: 0
           }
         ],
         date: moment(),
-        categories: newCategorie,
-        serieData: newSerieData
-      });
+        data: [...this.state.data, newEntry]
+      }));
     }
-
-  }
+    else {
+      this.setState({error: true});
+      setTimeout(() => this.errorVisibleTimer(), 5000);
+      console.log("error sent");
+    }
+  };
 
   render() {
     return (
       <div className="bg-gray-900 h-full w-full">
         <Menu />
-        <div className="flex flex-col justify-around">
-          <WorkoutRoutine tableRows={this.state.tableRows} 
-                          date={this.state.date} 
-                          setExerciseName={this.handleExerciseNameChange} 
-                          setSeries={this.handleSeriesChange} 
-                          setReps={this.handleRepsChange} 
-                          setCharge={this.handleChargeChange} 
-                          setDate={this.handleDateChange} 
-                          addRow={this.addNewRow}
-                          submitData={this.handleWorkoutRoutineData}
+        <div className="flex flex-col justify-around h-full">
+          <WorkoutRoutine
+            tableRows={this.state.tableRows}
+            date={this.state.date}
+            setExerciseName={this.handleExerciseNameChange}
+            setSeries={this.handleSeriesChange}
+            setReps={this.handleRepsChange}
+            setCharge={this.handleChargeChange}
+            setDate={this.handleDateChange}
+            addRow={this.addNewRow}
+            submitData={this.handleWorkoutRoutineData}
+            error={this.state.error}
           />
-          <RoutineDataVisualizer data={this.state.visualizeData}/>
+          <div className="chart-container">
+            <ResponsiveBarChart
+              width={700}
+              data={this.state.data}
+              keys={["maxCharge"]}
+              indexBy="date"
+              margin={{ top: 70, right: 150, bottom: 70, left: 70 }}
+              padding={0.7}
+              colors={{ scheme: "category10" }}
+              borderColor="#ffffff"
+              axisTop={null}
+              axisRight={null}
+              axisBottom={{
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legend: "Date",
+                legendPosition: "middle",
+                legendOffset: 32
+              }}
+              axisLeft={{
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legend: "Charge",
+                legendPosition: "middle",
+                legendOffset: -40
+              }}
+              labelSkipWidth={12}
+              labelSkipHeight={12}
+              labelTextColor="#ffffff"
+              animate={true}
+              motionStiffness={90}
+              motionDamping={15}
+            />
+          </div>
         </div>
       </div>
     );
