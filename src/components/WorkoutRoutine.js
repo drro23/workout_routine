@@ -5,7 +5,7 @@ import { DatePicker }from "antd";
 import "antd/dist/antd.css";
 import "../styles/WorkoutRoutine.scss";
 import { Button } from 'antd';
-import { ReactComponent as PlusIcon} from '../icons8-plus.svg';
+import { ReactComponent as PlusIcon} from '../images/icons8-plus.svg';
 
 class WorkoutRoutine extends React.Component {
     // Arrow fx for binding
@@ -43,7 +43,7 @@ class WorkoutRoutine extends React.Component {
             <TableRow key={id} id={id} exerciseName={exerciseName} series={series} reps={reps} charge={charge} onExerciseNameChange={this.handleExerciseNameChange} onSeriesChange={this.handleSeriesChange} onRepsChange={this.handleRepsChange} onChargeChange={this.handleChargeChange} />
         );
 
-        const errorMessage = <p>You must fill all the fields before validating !</p>;
+        const errorMessage = <p>You must fill all fields before validating !</p>;
 
         return (
             <div className="mx-auto mt-10 p-6 wkr-table">

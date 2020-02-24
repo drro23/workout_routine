@@ -163,7 +163,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="bg-gray-900 h-full w-full">
+      <div id="app-container" className="h-full w-full">
         <Menu />
         <div className="flex flex-col justify-around h-full">
           <WorkoutRoutine
@@ -180,7 +180,8 @@ class App extends React.Component {
           />
           <div className="chart-container">
             <ResponsiveBarChart
-              width={700}
+              width={800}
+              height={700}
               data={this.state.data}
               keys={["maxCharge"]}
               indexBy="date"
