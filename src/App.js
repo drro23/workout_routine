@@ -23,8 +23,10 @@ class App extends React.Component {
       date: moment(),
       data: [
         {
-          date: "02-17-2020",
-          maxCharge: 10
+          date: moment()
+            .subtract(1, "days")
+            .format("M-D-Y"),
+          maxCharge: 0
         }
       ],
       error: false
@@ -120,7 +122,7 @@ class App extends React.Component {
   }
 
   errorVisibleTimer() {
-    this.setState({error: this.state.error ? false : this.state.error});
+    this.setState({ error: this.state.error ? false : this.state.error });
   }
 
   // Arrow fx for binding
@@ -153,9 +155,8 @@ class App extends React.Component {
         date: moment(),
         data: [...this.state.data, newEntry]
       }));
-    }
-    else {
-      this.setState({error: true});
+    } else {
+      this.setState({ error: true });
       setTimeout(() => this.errorVisibleTimer(), 5000);
       console.log("error sent");
     }
@@ -163,9 +164,9 @@ class App extends React.Component {
 
   render() {
     return (
-      <div id="app-container" className="h-full w-full">
+      <div id="app-container">
         <Menu />
-        <div className="flex flex-col justify-around h-full">
+        <div className="flex flex-col justify-around">
           <WorkoutRoutine
             tableRows={this.state.tableRows}
             date={this.state.date}
@@ -178,10 +179,10 @@ class App extends React.Component {
             submitData={this.handleWorkoutRoutineData}
             error={this.state.error}
           />
-          <div className="chart-container">
+          <div className="h-20">
             <ResponsiveBarChart
               width={800}
-              height={700}
+              height={450}
               data={this.state.data}
               keys={["maxCharge"]}
               indexBy="date"

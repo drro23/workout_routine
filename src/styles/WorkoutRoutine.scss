@@ -1,6 +1,7 @@
 .wkr-table {
     border-radius: 15px;
     background-color: rgb(70, 70, 70);
+    overflow-y: scroll;
 }
 
 .wkr-table form table tbody tr td > input {
